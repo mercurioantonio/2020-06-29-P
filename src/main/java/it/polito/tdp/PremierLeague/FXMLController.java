@@ -5,6 +5,7 @@
 package it.polito.tdp.PremierLeague;
 
 import java.net.URL;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -39,7 +40,7 @@ public class FXMLController {
     private TextField txtMinuti; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbMese"
-    private ComboBox<?> cmbMese; // Value injected by FXMLLoader
+    private ComboBox<String> cmbMese; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbM1"
     private ComboBox<?> cmbM1; // Value injected by FXMLLoader
@@ -52,11 +53,34 @@ public class FXMLController {
 
     @FXML
     void doConnessioneMassima(ActionEvent event) {
-    	
+    	txtResult.clear();
+    	try{
+        	int time = Integer.parseInt(txtMinuti.getText());
+        	
+        	txtResult.appendText(model.getConnMax(time));
+    	}
+    	catch (NumberFormatException e) {
+    		e.printStackTrace();
+			return;
+    	}
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
+    	
+    	try{
+    	int time = Integer.parseInt(txtMinuti.getText());
+    	String m = cmbMese.getValue();
+    	model.creaGrafo(time, m);
+    	
+    	txtResult.appendText("GRAFO CREATO:\n");
+    	txtResult.appendText("#vertici: " + model.nVertici());
+    	txtResult.appendText("\n#archi: " + model.nArchi());
+    	}
+    	catch (NumberFormatException e) {
+    		e.printStackTrace();
+			return;
+    	}
     	
     }
 
@@ -79,6 +103,8 @@ public class FXMLController {
     
     public void setModel(Model model) {
     	this.model = model;
+    	String[] m = {"Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"};
+    	cmbMese.getItems().addAll(m);
   
     }
     
